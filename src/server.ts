@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv'
 import {id} from './utils/ID'
 dotenv.config()
+import cors from 'cors'
 
 import route from './routes/S_and_L'
 
@@ -10,6 +11,7 @@ const app = express();
 
 app.use(express.json());
 app.use('/server' , route)
+app.use(cors())
 
 mongoose.connect(process.env.MONGO_URI as string) 
 .then(()=> {
