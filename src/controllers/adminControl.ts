@@ -73,7 +73,8 @@ class admincontrol {
          sendRes(res , 200 , true , "all student fetch successfully" , getall)
      } catch (error:any) {
       res.status(500).json({
-        message:error.message
+        error:error.message,
+        stack:error.stack
       })
      }
    }
