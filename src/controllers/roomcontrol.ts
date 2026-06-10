@@ -56,7 +56,7 @@ getRoomById = async (req: Request, res: Response) => {
   try {
     const roomid = await room.findById(req.params.id)
     if (!roomid) return sendRes(res, 404, false, "room not found")
-    sendRes(res, 200, true, "room fetched", room)
+    sendRes(res, 200, true, "room fetched", roomid)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
