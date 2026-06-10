@@ -121,7 +121,7 @@ studentLogin = async (req:Request , res:Response) => {
             return sendRes(res , 400 , false , "email not found")
         }
 
-        const checkPassword =  bcrypt.compare(password , checkEmail.password)
+        const checkPassword = await bcrypt.compare(password , checkEmail.password)
 
         if(!checkPassword){
             return sendRes(res , 400 , false , "password not march")
