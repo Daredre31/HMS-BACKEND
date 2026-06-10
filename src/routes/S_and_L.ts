@@ -12,6 +12,7 @@ const route = express.Router()
 
 route.post('/room' ,roomObject.createRoom )
 route.get('/allroom' ,roomObject.getallroom )
+route.get('/room/:id', roomObject.getRoomById)
 route.post('/bed' , Bedobject.createBed)
 route.get('/allbed' , Bedobject.getallBeds)
 
@@ -19,7 +20,7 @@ route.get('/allbed' , Bedobject.getallBeds)
 // route for admin control crud operation
 
 route.post('/createStudent',protect, roleauth('admin'), adminControl.createstudent);
-route.get('/getStudents' ,protect , roleauth('admin'), adminControl.getallStudent)
+route.get('/getStudents' ,protect , roleauth('admin'), adminControl.getallStudent);
 
 
 // route for signups and signing function

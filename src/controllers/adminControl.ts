@@ -3,6 +3,7 @@ import Bed from '../models/Bed'
 import { sendRes } from '../utils/response'
 import studentid from '../models/studentId'
 import {id} from '../utils/ID'
+import Room from '../models/room'
 
 
 
@@ -78,6 +79,8 @@ class admincontrol {
       })
      }
    }
+
+   
 }
 
   
