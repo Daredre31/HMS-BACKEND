@@ -136,6 +136,7 @@ studentLogin = async (req:Request , res:Response) => {
             message:"login successfuly",
             data:checkEmail,
             token:token,
+            role:checkEmail.role
         })
 
     } catch (error:any) {
