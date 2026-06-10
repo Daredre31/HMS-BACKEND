@@ -6,12 +6,22 @@ dotenv.config()
 import cors from 'cors'
 
 import route from './routes/S_and_L'
-
 const app = express();
 
+app.use(
+  cors({
+    origin: ["http://localhost:5173"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use('/server' , route)
-app.use(cors())
+
+app.get("/", (req, res) => {
+  res.send("Backend is working");
+});
+
 
 mongoose.connect(process.env.MONGO_URI as string) 
 .then(()=> {
