@@ -2,7 +2,7 @@ import users from '../models/user'
 import {Request , Response} from 'express'
 import bcrypt from 'bcrypt'
 import  Jwt  from 'jsonwebtoken'
-import studentId from '../models/studentId'
+import studentId from '../models/studentId'  
 import { sendRes } from '../utils/response'
 
 
