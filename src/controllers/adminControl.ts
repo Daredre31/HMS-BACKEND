@@ -80,7 +80,46 @@ class admincontrol {
      }
    }
 
-   
+   deletestudentById = async(req:Request , res:Response) => {
+    const {id} = req.params
+
+    try {
+      const delstudent = await studentid.findByIdAndDelete(id) 
+      if(!delstudent) {
+        return sendRes(res , 400 , false , "error cannnot delete student")
+
+      }
+
+      sendRes(res, 200 , true , "student deleted successfuly")
+    } catch (error:any) {
+      res.status(500).json({
+        error:error.message
+      })
+    }
+   }
+
+   updateStudentByid = async (req:Request , res:Response) => {
+      const {id} = req.params
+      const update = req.body
+
+      if(!id) {
+        return sendRes(res , 400 , false , "could not find id")
+      }
+
+      try {
+        const updateStudent = await studentid.findByIdAndUpdate(id, update , {new:true})
+
+          if(!updateStudent){
+            return sendRes(res , 400 , false , "could not update student")
+          }
+
+          sendRes(res , 200 , true , "student updated succeessfully" , updateStudent)
+      } catch (error:any) {
+         res.status(500).json({
+           error:error.message
+         })
+      }
+   }
 }
 
   
