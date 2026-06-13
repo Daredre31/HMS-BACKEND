@@ -24,6 +24,7 @@
     "ioredis": "^5.11.1",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.6.3",
+    "multer": "^2.1.1",
     "nanoid": "^5.1.11",
     "rate-limit-redis": "^5.0.0",
     "ts-node": "^10.9.2",

@@ -6,6 +6,7 @@ import authcontrol from '../controllers/authcontrol'
 import protect from "../middlewares/authwware"
 import roleauth from '../middlewares/roleauthware'
 import { loginLimit } from '../middlewares/rateLimit'
+import complain from '../controllers/complain'
 
 const route = express.Router()
 
@@ -30,5 +31,13 @@ route.patch('/updateStudent/:id' , protect , roleauth('admin') , adminControl.up
 
 route.post('/loginStudent',loginLimit , authcontrol.studentLogin)
 route.post('/createAdmin',loginLimit , authcontrol.AdminSignup)
-route.post('/loginAdmin',loginLimit , authcontrol.adminLogin)
+route.post('/loginAdmin',loginLimit , authcontrol.adminLogin);
+
+
+// route for student complains and notifications
+
+route.post('/createcomplain', protect , complain.createcomplain)
+route.put('/replycomplain' , protect ,roleauth('admin'), complain.respondTocomplains)
+route.get('/viewallcomplains', protect , roleauth('admin') , complain.viewallcomplains)
+route.get('/viewmycomplain' , protect , complain.viewmyComplains)
 export default route
