@@ -2,6 +2,8 @@ import studentComplains from '../models/complaint.model'
 import {Request , Response} from 'express'
 import { sendRes } from '../utils/response'
 import { Authreqest } from '../middlewares/authwware'
+import notismodel from '../models/notification.model'
+import users from '../models/user'
 
 class complains {
     createcomplain = async(req:Authreqest , res:Response)=> {
@@ -20,6 +22,19 @@ class complains {
                 return sendRes(res , 400 , false , "could write complains")
             }
 
+           const admin = await users.findOne({role:'admin'})
+
+           if(admin) {
+             await notismodel.create({
+                recipient:admin._id,
+                recipientRole:"admin",
+                title:"new notification",
+                message:"student submitted a complain"
+
+             }
+             )
+           } 
+
             sendRes(res , 201 , true , "complain submitted successfully" , writecomplains)
         } catch (error:any) {
             res.status(500).json({
@@ -31,15 +46,17 @@ class complains {
         try {
             const getallcomplains = await studentComplains.find()
             .populate('student')
-            .sort({createAt:-1})
+            .sort({createdAt:-1})
 
-            if(!getallcomplains) {
+            if(getallcomplains.length == 0) {
               return  sendRes(res , 400 , false , "could fetch complains")
             }
 
             sendRes(res , 200 , true ,"complains successfully fetched", getallcomplains )
-        } catch (error) {
-            
+        } catch (error:any) {
+            res.status(500).json({
+              error:error.message
+            })
         }
     };
 
@@ -59,6 +76,13 @@ class complains {
         if(!updateComplains){
             return sendRes(res, 400 , false , "response is bad")
         }
+
+          await notismodel.create({
+            recipient:(updateComplains.student as any)._id,
+            recipientRole:"student",
+            title:"new notification",
+            message:"view admin response"
+          })
 
         sendRes(res , 200 , true , "complains updated successfully" , updateComplains)
       } catch (error:any) {
