@@ -39,12 +39,29 @@ class admincontrol {
   })
 
   if(!studentProfile){
-    sendRes(res ,400 , false , "error while creating student profile")
+   return sendRes(res ,400 , false , "error while creating student profile")
   }
 
     bedCheck.isOccupied = true
     await bedCheck.save()
 
+
+    const room = await Room.findById(bedCheck.room)
+    const countBed = await Bed.countDocuments({
+      room:bedCheck.room, isOccupied:true
+    })
+
+      if(room) {
+        if(countBed >= room.roomCapacity){
+          room.roomStatus = "fullyOccupied"
+        } else if (countBed > 0) {
+          room.roomStatus = "partiallyOccupied"
+        }
+
+        else{
+          room.roomStatus = "available"
+        }
+      }
   sendRes(res , 201 , true , "student profile created successfully" ,
     studentProfile
   )

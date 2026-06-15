@@ -12,7 +12,7 @@ const roomSchema = new mongoose.Schema({
     },
     roomStatus:{
         type:String,
-        enum:['available' , 'fullyOccupied' , 'under_Maintenance'],
+        enum:['available' ,"partiallyOccupied", 'fullyOccupied' , 'under_Maintenance'],
         default:'available'
     }
 },{timestamps:true})

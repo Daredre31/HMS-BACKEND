@@ -23,7 +23,7 @@ class Bedobject {
   })
 
   if(countBedInThisroom >= roomExist.roomCapacity) {
-    return sendRes(res , 400, false , "room fully occupied no more bed can be created ")
+    return sendRes(res , 400, false , "the bed capacity of this room  has been reached")
   }
 
     const checkBedAvail = await Bed.findOne({bedNumber})
@@ -35,15 +35,7 @@ class Bedobject {
        bedNumber , room
     })
 
-
-    const currentBed = countBedInThisroom + 1 
-
-    if(currentBed === roomExist.roomCapacity){
-        roomExist.roomStatus ="fullyOccupied"
-        await roomExist.save()
-    }
     
-
     if(!createNewBed) {
       return sendRes(res , 400 , false , "error while creating the bed")
     }
