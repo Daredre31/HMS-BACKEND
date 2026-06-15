@@ -34,6 +34,11 @@ class Bedobject {
     const createNewBed = await Bed.create({
        bedNumber , room
     })
+
+    if(countBedInThisroom === roomExist.roomCapacity){
+        roomExist.roomStatus ="fullyOccupied"
+        await roomExist.save()
+    }
     
 
     if(!createNewBed) {
