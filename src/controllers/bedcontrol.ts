@@ -2,14 +2,30 @@
 import Bed from "../models/Bed"
 import { Request , Response } from "express";
 import { sendRes } from "../utils/response";
+import Room from "../models/room";
 
 
 
 class Bedobject {
    createBed = async (req:Request , res:Response) => {
-  const {bedNumber , room  ,} =  req.body
+  const {bedNumber , room } =  req.body
 
   try {
+
+     const roomExist = await Room.findById(room);
+
+     if(!roomExist){
+      return sendRes(res, 400 , false , "room does not exist")
+     }
+
+  const countBedInThisroom = await Bed.countDocuments({
+    room:room
+  })
+
+  if(countBedInThisroom >= roomExist.roomCapacity) {
+    return sendRes(res , 400, false , "room fully occupied no more bed can be created ")
+  }
+
     const checkBedAvail = await Bed.findOne({bedNumber})
    if(checkBedAvail){
         sendRes(res , 400 , false , "bed is not available")
@@ -45,7 +61,15 @@ getallBeds = async(req:Request , res:Response) => {
       message:error.message
     })
    }
-}
+};
+
+  getBedsByRoom = async(req:Request , res:Response) => {
+    try {
+      const findByBedByRoom = await Bed.find()
+    } catch (error) {
+      
+    }
+  }
 }
 
 
