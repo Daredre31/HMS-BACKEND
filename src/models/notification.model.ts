@@ -8,7 +8,7 @@ const notisSchema = new mongoose.Schema({
     },
     recipientRole:{
         type:String,
-        enum:['student' , 'hoh' , 'admin']
+        enum:['idmodel' , 'hoh' , 'admin']
     },
     title:{
         type:String,
