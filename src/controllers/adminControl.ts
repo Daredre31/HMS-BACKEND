@@ -20,7 +20,7 @@ class admincontrol {
       const bedCheck = await Bed.findById(bedId)
 
       if(!bedCheck){
-        return sendRes(res , 400 , false , "bed alaredy exist")
+        return sendRes(res , 400 , false , "bed doesnt  exist")
       };
 
       if(bedCheck.isOccupied){
@@ -30,11 +30,11 @@ class admincontrol {
       const checkEmail = await studentid.findOne({email}) 
 
       if(checkEmail){
-        return sendRes(res , 400 , false , "email already exist")
+        return sendRes(res , 409 , false , "email already exist")
       }
 
        const studentProfile = await studentid.create({
-        tokenId:tokenId ,name , email , bed:bedId   , paymentStatus:'pending',
+        tokenId:tokenId ,name , email , bed:bedId   , paymentStatus,
         currentSession , expiryDate
   })
 
@@ -47,11 +47,15 @@ class admincontrol {
 
 
     const room = await Room.findById(bedCheck.room)
-    const countBed = await Bed.countDocuments({
+  
+      if(!room) {
+        return sendRes(res , 400 , false , "room not found")
+      }
+
+      const countBed = await Bed.countDocuments({
       room:bedCheck.room, isOccupied:true
     })
 
-      if(room) {
         if(countBed >= room.roomCapacity){
           room.roomStatus = "fullyOccupied"
         } else if (countBed > 0) {
@@ -61,7 +65,10 @@ class admincontrol {
         else{
           room.roomStatus = "available"
         }
-      }
+      
+
+      await room.save()
+
   sendRes(res , 201 , true , "student profile created successfully" ,
     studentProfile
   )
@@ -101,11 +108,38 @@ class admincontrol {
     const {id} = req.params
 
     try {
-      const delstudent = await studentid.findByIdAndDelete(id) 
-      if(!delstudent) {
-        return sendRes(res , 400 , false , "error cannnot delete student")
+      const student = await studentid.findById(id) 
+
+      if(!student) {
+        return sendRes(res , 404 , false , "error cannot find student")
 
       }
+
+      const findStudentBed = await Bed.findById(student.bed) 
+
+      if(findStudentBed) {
+        findStudentBed.isOccupied = false
+
+        await findStudentBed.save()
+
+        const findStudentroom = await Room.findById(findStudentBed.room)
+
+        if(findStudentroom) {
+          const countBed = await Bed.countDocuments({
+            room:findStudentroom._id, isOccupied:true
+          })
+
+          if(countBed === 0){
+            findStudentroom.roomStatus = "available"
+          } else if(countBed < findStudentroom.roomCapacity){
+            findStudentroom.roomStatus = "partiallyOccupied"
+          }
+
+          await findStudentroom.save()
+        }
+      }
+
+      await studentid.findByIdAndDelete(id)
 
       sendRes(res, 200 , true , "student deleted successfuly")
     } catch (error:any) {

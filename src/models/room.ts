@@ -5,14 +5,16 @@ const roomSchema = new mongoose.Schema({
         type:Number,
         required:true,
         unique:true,
+        min:1
     },
     roomCapacity:{
        type:Number,
        required:true, 
+       min:1
     },
     roomStatus:{
         type:String,
-        enum:['available' ,"partiallyOccupied", 'fullyOccupied' , 'under_Maintenance'],
+        enum:['available' ,"partiallyOccupied", 'fullyOccupied' , 'underMaintenance'],
         default:'available'
     }
 },{timestamps:true})
