@@ -71,7 +71,7 @@ class complains {
       try {
         const updateComplains = await studentComplains.findByIdAndUpdate(id , {
             adminResponse:response , status:status , responseBy:req.user?.id
-        }).populate('student')
+        }, {new:true}).populate('student')
 
         if(!updateComplains){
             return sendRes(res, 400 , false , "response is bad")
