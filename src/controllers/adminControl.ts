@@ -151,14 +151,16 @@ class admincontrol {
 
    updateStudentByid = async (req:Request , res:Response) => {
       const {id} = req.params
-      const update = req.body
+      const {
+        name, email , currentSession
+      } = req.body
 
       if(!id) {
         return sendRes(res , 400 , false , "could not find id")
       }
 
       try {
-        const updateStudent = await studentid.findByIdAndUpdate(id, update , {new:true})
+        const updateStudent = await studentid.findByIdAndUpdate(id, {name , email , currentSession} , {new:true})
 
           if(!updateStudent){
             return sendRes(res , 400 , false , "could not update student")
