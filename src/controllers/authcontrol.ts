@@ -74,6 +74,12 @@ studentLogin = async (req:Request , res:Response) => {
         return sendRes(res , 400 , false , "all field are required")
       }
 
+      const existingAdmin = await users.findOne({email})
+
+      if(existingAdmin) {
+        return sendRes(res , 400 , false , "admin already exist")
+      }
+
       const hash = await bcrypt.hash(password , 10)
 
       if(!hash) {
@@ -118,13 +124,13 @@ studentLogin = async (req:Request , res:Response) => {
         })
 
         if(!checkEmail){
-            return sendRes(res , 400 , false , "email not found")
+            return sendRes(res , 401 , false , "email not found")
         }
 
         const checkPassword = await bcrypt.compare(password , checkEmail.password)
 
         if(!checkPassword){
-            return sendRes(res , 400 , false , "password not march")
+            return sendRes(res , 401 , false , "password does not  match")
         }
 
         const secret = process.env.JWT_SECRET as string
@@ -134,15 +140,14 @@ studentLogin = async (req:Request , res:Response) => {
         res.status(200).json({
             success:true , 
             message:"login successfuly",
-            data:checkEmail,
             token:token,
-            role:checkEmail.role
+            role:checkEmail.role,
+            name:checkEmail.name,
+             email:checkEmail.email
         })
 
     } catch (error:any) {
-        res.status(500).json({
-            message:error.message
-        })
+        return sendRes(res , 500 , false ,"internal server error")
     }
   }
 

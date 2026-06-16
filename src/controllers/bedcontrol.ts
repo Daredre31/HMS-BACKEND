@@ -63,9 +63,15 @@ getallBeds = async(req:Request , res:Response) => {
    }
 };
 
-  getBedsByRoom = async(req:Request , res:Response) => {
+  deleteBedbyId = async(req:Request , res:Response) => {
+    const {id} = req.params
+
     try {
-      const findByBedByRoom = await Bed.find()
+      const deletebed = await Bed.findByIdAndDelete(id)
+
+      if(!deletebed){
+        
+      }
     } catch (error) {
       
     }

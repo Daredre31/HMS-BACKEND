@@ -13,7 +13,7 @@ const protects = async (req:Authreqest , res:Response , next:NextFunction) => {
          const bearerToken =  req.headers.authorization
 
       if(!bearerToken || !bearerToken.startsWith("Bearer ")) {
-        return res.status(400).json({
+        return res.status(401).json({
             success:false,
             message:"invalid token provided"
         })
@@ -34,7 +34,7 @@ const protects = async (req:Authreqest , res:Response , next:NextFunction) => {
       next()
         
     } catch (error:any) {
-       res.status(500).json({
+       return res.status(401).json({
         message:error.message
        })   
     }

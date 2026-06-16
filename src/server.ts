@@ -1,13 +1,17 @@
 import express from 'express'
 import mongoose from 'mongoose';
 import dotenv from 'dotenv'
-import {id} from './utils/ID'
 dotenv.config()
 import cors from 'cors'
-
+import helmet from 'helmet';
 import route from './routes/S_and_L'
+import { dbconnection } from './configs/db.connection';
+
+
 const app = express();
 
+
+app.use(helmet())
 app.use(
   cors({
     origin: ["http://localhost:5173"],
@@ -28,19 +32,19 @@ app.get("/", (req, res) => {
   res.send("Backend is working");
 });
 
-
-mongoose.connect(process.env.MONGO_URI as string) 
-.then(()=> {
-    console.log("mongo is connected")
-})
-.catch(()=> {
-    console.log("mongo is not working")
-})
-
-id()
-
 const port = process.env.PORT_NUM || 5000
 
-app.listen(port , ()=> {
+const startServer = async () => {
+  try {
+    await dbconnection()
+
+    app.listen(port , ()=> {
     console.log("server is running")
 })
+
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+startServer()

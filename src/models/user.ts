@@ -5,18 +5,23 @@ const allUserSchema = new mongoose.Schema({
         type:String,
         required:true,
         minlength: 3 ,
+        trim:true
 
     },
 
     email : {
         type:String,
         required:true,
+        unique:true ,
+        lowercase:true,
+        index:true
 
     },
 
     password:{
         type:String,
-        required:true
+        required:true,
+        minlength:6,
     
 } ,
 
