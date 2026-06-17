@@ -50,7 +50,9 @@ getallroom = async(req:Request , res:Response) => {
          message:error.message
         })
      }
-}
+};
+
+
 
 getRoomById = async (req: Request, res: Response) => {
   try {

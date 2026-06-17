@@ -8,6 +8,7 @@ import roleauth from '../middlewares/roleauthware'
 import { loginLimit } from '../middlewares/rateLimit'
 import complain from '../controllers/complain'
 import notisController from '../controllers/notisController'
+import Dashboard from '../controllers/Dashboard'
 
 const route = express.Router()
 
@@ -46,6 +47,10 @@ route.get('/viewmycomplain' , protect , complain.viewmyComplains)
 route.get('/allnotis' , protect , notisController.getallNotification)
 route.get('/unreadnotis' , protect , notisController.getUnreads)
 route.patch('/marknotis/:id' , protect , notisController.markasread)
-route.patch('/markallasread' , protect , notisController.markAllasread)
+route.patch('/markallasread' , protect , notisController.markAllasread);
+
+// dashboard statistics
+
+route.get('/dashboardstats' ,protect, roleauth('admin'), Dashboard.countStudent)
 
 export default route
