@@ -51,6 +51,6 @@ route.patch('/markallasread' , protect , notisController.markAllasread);
 
 // dashboard statistics
 
-route.get('/dashboardstats' ,protect, roleauth('admin'), Dashboard.countStudent)
+route.get('/dashboardstats' , Dashboard.countStudent)
 
 export default route

@@ -16,10 +16,14 @@ class DashboardStats{
        const countRoom = await Room.countDocuments();
        const countBed = await Bed.countDocuments();
        const isOccupiedBed = await Bed.countDocuments({isOccupied:true});
-       const countComplains = await complain.countDocuments()
+       const countComplains = await complain.countDocuments({status:"pending"});
+       const occupiedRoom = await Room.countDocuments({roomStatus:"fullyOccupied"})
+       const pendingPayment = await idmodel.countDocuments({paymentStatus:"pending"})
 
        sendRes(res , 200 , true , "student counted successfully" , {
-        student:countStudent , room:countRoom , bed:countBed , occpiedBed:isOccupiedBed , complain:countComplains
+        totalStudents:countStudent , occupiedRooms:occupiedRoom , bed:countBed , occpiedBed:isOccupiedBed , activeComplaints:countComplains,
+         totalRooms:countRoom ,  pendingPayments:pendingPayment
+
     })
        } catch (error:any) {
         return sendRes(res , 500 , false, "internal server error")
