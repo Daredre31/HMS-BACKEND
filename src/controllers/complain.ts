@@ -87,7 +87,8 @@ class complains {
         sendRes(res , 200 , true , "complains updated successfully" , updateComplains)
       } catch (error:any) {
         res.status(500).json({
-            error:error.message
+            error:error.message,
+            stack:error.stack
         })
       }
     };
