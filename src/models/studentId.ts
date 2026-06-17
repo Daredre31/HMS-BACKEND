@@ -3,18 +3,22 @@ import mongoose from "mongoose";
 const idSchema = new mongoose.Schema({
     tokenId : {
         type:String,
-        required:true
+        required:true,
+        unique:true,
     },
 
      name:{
            type:String,
            required:true,
+           trim:true
        },
    
        email:{
            type:String,
            required:true,
-           unique:true
+           unique:true,  
+           lowercase: true,
+           trim: true
        },
         currentSession:{
            type:String,
@@ -23,7 +27,8 @@ const idSchema = new mongoose.Schema({
         bed:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Bed",
-        required:true
+        required:true,
+        index:true
     },
      paymentStatus: {
       type: String,

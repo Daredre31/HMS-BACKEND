@@ -28,7 +28,7 @@ class Bedobject {
 
     const checkBedAvail = await Bed.findOne({bedNumber})
    if(checkBedAvail){
-        sendRes(res , 400 , false , "bed is not available")
+       return sendRes(res , 400 , false , "bed is not available")
    }
   
     const createNewBed = await Bed.create({
@@ -51,7 +51,7 @@ class Bedobject {
 getallBeds = async(req:Request , res:Response) => {
    try {
     const getBeds = await Bed.find().populate('room')
-    if(!getBeds){
+    if(getBeds.length === 0){
       sendRes(res , 400 , false , "could not fetch all bed data")
     }
 
@@ -70,10 +70,16 @@ getallBeds = async(req:Request , res:Response) => {
       const deletebed = await Bed.findByIdAndDelete(id)
 
       if(!deletebed){
-        
+       return sendRes(res , 400 , false , "cant delete bed ") 
       }
+
+      if(deletebed.isOccupied) {
+        return sendRes(res, 400 , false , 'cant delete ocupied bed')
+      }
+
+      sendRes(res , 200 , true , "bed deleted successfully")
     } catch (error) {
-      
+      return sendRes(res, 500 , false , "internal server error")
     }
   }
 }
