@@ -6,12 +6,14 @@ import cors from 'cors'
 import helmet from 'helmet';
 import route from './routes/S_and_L'
 import { dbconnection } from './configs/db.connection';
+import morgan from 'morgan'
 
 
 const app = express();
 
 
 app.use(helmet())
+app.use(morgan('dev'))
 app.use(
   cors({
     origin: ["http://localhost:5173"],

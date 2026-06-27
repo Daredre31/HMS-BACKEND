@@ -4,6 +4,8 @@ import bcrypt from 'bcrypt'
 import  Jwt  from 'jsonwebtoken'
 import studentId from '../models/studentId'  
 import { sendRes } from '../utils/response'
+import redis from '../configs/redisConnect'
+import { nanoid } from 'nanoid'
 
 
 class Authcontrol {
@@ -58,7 +60,8 @@ studentLogin = async (req:Request , res:Response) => {
 
     } catch (error:any) {
         res.status(500).json({
-            message:"server error try again"
+            message:"server error try again",
+            stack:error.stack
         })
     }
 }
@@ -133,9 +136,20 @@ studentLogin = async (req:Request , res:Response) => {
             return sendRes(res , 401 , false , "password does not  match")
         }
 
+        const sessionId = nanoid();
+
+        const sessionData = {
+            userId : checkEmail._id,
+            role:checkEmail.role,
+            ip : req.ip
+        }
+
+        await redis.set(`sessionId: ${sessionId}` ,JSON.stringify(sessionData) , 'EX' , 604800)
+
+
         const secret = process.env.JWT_SECRET as string
 
-        const token = Jwt.sign({id:checkEmail._id , role:checkEmail.role} , secret , {expiresIn:"7d"})
+        const token = Jwt.sign({id:checkEmail._id , role:checkEmail.role , sessionId} , secret , {expiresIn:"7d"})
 
         res.status(200).json({
             success:true , 

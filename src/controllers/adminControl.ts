@@ -4,6 +4,7 @@ import { sendRes } from '../utils/response'
 import studentid from '../models/studentId'
 import {id} from '../utils/ID'
 import Room from '../models/room'
+import jwt from 'jsonwebtoken'
 
 
 
@@ -173,6 +174,30 @@ class admincontrol {
            error:error.message
          })
       }
+   }
+
+   assignHohRole = async(req:Request , res:Response) => {
+     const {tokenId ,  role} = req.body 
+     const {id} = req.params
+     try {
+      const tokenIdVerify = await studentid.findOne({tokenId})
+      if(!tokenIdVerify) {
+        return sendRes(res, 401 , false , "student doesnt exist")
+      }
+
+      const findStudentandUpdate = await studentid.findByIdAndUpdate(id ,{tokenId:tokenIdVerify.tokenId , role:role} );
+
+      if(!findStudentandUpdate){
+        return sendRes(res , 400 , false, 'unable to update student')
+      }
+      const secret = process.env.JWT_SECRET as string
+
+      const sign = jwt.sign({id:findStudentandUpdate._id , role:findStudentandUpdate.role} , secret , {expiresIn:'7d'} )
+
+      sendRes(res , 200 , true ,'hoh created successfully', {findStudentandUpdate , token:sign})
+     } catch (error) {
+      sendRes(res , 500 , false , 'error occured wh8le updating student')
+     }
    }
 }
 

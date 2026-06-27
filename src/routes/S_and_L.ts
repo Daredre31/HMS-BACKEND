@@ -9,6 +9,7 @@ import { loginLimit } from '../middlewares/rateLimit'
 import complain from '../controllers/complain'
 import notisController from '../controllers/notisController'
 import Dashboard from '../controllers/Dashboard'
+import { testing } from '../controllers/testredis'
 
 const route = express.Router()
 
@@ -27,6 +28,7 @@ route.post('/createStudent',protect, roleauth('admin'), adminControl.createstude
 route.get('/getStudents' ,protect , roleauth('admin'), adminControl.getallStudent);
 route.delete('/deleteStudent/:id' , protect , roleauth('admin') , adminControl.deletestudentById)
 route.patch('/updateStudent/:id' , protect , roleauth('admin') , adminControl.updateStudentByid)
+route.patch('/createHOH/:id' , protect , roleauth('admin') , adminControl.assignHohRole)
 
 
 // route for signups and signing function
@@ -53,4 +55,8 @@ route.patch('/markallasread' , protect , notisController.markAllasread);
 
 route.get('/dashboardstats',protect, roleauth('admin') , Dashboard.countStudent)
 
+route.get('/testing' , testing)
+
 export default route
+
+//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMjkwY2M5N2Y3YzZkMGRkYzIyZDAxMyIsInJvbGUiOiJhZG1pbiIsInNlc3Npb25JZCI6IldneDhyOW1Sd2phT3phT3NoQ3AzcyIsImlhdCI6MTc4MjU5Mjg5NCwiZXhwIjoxNzgzMTk3Njk0fQ.cPMRKF1Bo5kQBH9V7IKZB1YbhNNZLxaQx8HeMvWCed8

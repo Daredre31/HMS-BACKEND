@@ -19,7 +19,7 @@ class complains {
             })
 
             if(!writecomplains) {
-                return sendRes(res , 400 , false , "could write complains")
+                return sendRes(res , 400 , false , "couldnt write complains")
             }
 
            const admin = await users.findOne({role:'admin'})
@@ -54,9 +54,7 @@ class complains {
 
             sendRes(res , 200 , true ,"complains successfully fetched", getallcomplains )
         } catch (error:any) {
-            res.status(500).json({
-              error:error.message
-            })
+            return sendRes(res, 500 , false , "internal server error")
         }
     };
 
@@ -88,7 +86,6 @@ class complains {
       } catch (error:any) {
         res.status(500).json({
             error:error.message,
-            stack:error.stack
         })
       }
     };
@@ -98,7 +95,7 @@ class complains {
         try {
             const findMycomplains = await studentComplains.find({student:req.user.id})
             .sort({createdAt:-1})
-            if(!findMycomplains){
+            if(findMycomplains.length ===0){
                return sendRes(res, 400 , false , "cant fetch complains")
             }
 

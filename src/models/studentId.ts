@@ -47,6 +47,12 @@ const idSchema = new mongoose.Schema({
        required:true
     },
 
+    role : {
+        type:String,
+        enum:['studend' , 'hoh'],
+        default:'student'
+    }
+
 } , {timestamps:true})
 
 const idmodel = mongoose.model('idmodel' , idSchema)

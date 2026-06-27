@@ -1,5 +1,7 @@
 import {Request , Response , NextFunction} from 'express'
-import jwt from 'jsonwebtoken'
+import jwt, { JwtPayload } from 'jsonwebtoken'
+import redis from '../configs/redisConnect'
+import { sendRes } from '../utils/response'
 
 export interface Authreqest extends Request {
     user?:any
@@ -27,7 +29,13 @@ const protects = async (req:Authreqest , res:Response , next:NextFunction) => {
         )
       }
 
-      const verifiedToken =  jwt.verify(bearerSplit , process.env.JWT_SECRET as string );
+      const verifiedToken =  jwt.verify(bearerSplit , process.env.JWT_SECRET as string ) as JwtPayload;
+
+     const session = await redis.get(verifiedToken.sessionId)
+
+     if(!session) {
+        return sendRes(res , 401 , false , "session expired")
+     }
       
       req.user = verifiedToken
 
