@@ -49,12 +49,12 @@ const idSchema = new mongoose.Schema({
 
     role : {
         type:String,
-        enum:['studend' , 'hoh'],
+        enum:['student' , 'hoh'],
         default:'student'
     }
 
 } , {timestamps:true})
 
-const idmodel = mongoose.model('idmodel' , idSchema)
+const idmodel = mongoose.model('student' , idSchema)
 
 export default idmodel

@@ -5,7 +5,7 @@ const complaintSchema = new mongoose.Schema({
 
     student:{
       type:mongoose.Schema.Types.ObjectId,
-      ref:"idmodel",
+      ref:"student",
       required:true
     },
     title:{

@@ -1,5 +1,5 @@
 import { Request , Response} from "express";
-import idmodel from "../models/studentId";
+import student from "../models/studentId";
 import Room from "../models/room";
 import Bed from "../models/Bed";
 import complain from "../models/complaint.model"
@@ -8,7 +8,7 @@ import { sendRes } from "../utils/response";
 class DashboardStats{
     countStudent = async(req:Request , res:Response) => {
        try {
-        const countStudent = await idmodel.countDocuments()
+        const countStudent = await student.countDocuments()
        if(!countStudent) {
         return sendRes(res , 400 , false , "couldnot count students")
        }
@@ -18,7 +18,7 @@ class DashboardStats{
        const isOccupiedBed = await Bed.countDocuments({isOccupied:true});
        const countComplains = await complain.countDocuments({status:"pending"});
        const occupiedRoom = await Room.countDocuments({roomStatus:"fullyOccupied"})
-       const pendingPayment = await idmodel.countDocuments({paymentStatus:"pending"})
+       const pendingPayment = await student.countDocuments({paymentStatus:"pending"})
 
        sendRes(res , 200 , true , "student counted successfully" , {
         totalStudents:countStudent , occupiedRooms:occupiedRoom , bed:countBed , occpiedBed:isOccupiedBed , activeComplaints:countComplains,

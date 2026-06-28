@@ -77,7 +77,7 @@ class complains {
 
           await notismodel.create({
             recipient:(updateComplains.student as any)._id,
-            recipientRole:"idmodel",
+            recipientRole:"student",
             title:"new notification",
             message:"view admin response"
           })

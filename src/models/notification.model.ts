@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { title } from 'node:process'
+
 
 const notisSchema = new mongoose.Schema({
     recipient:{
@@ -8,7 +8,7 @@ const notisSchema = new mongoose.Schema({
     },
     recipientRole:{
         type:String,
-        enum:['idmodel' , 'hoh' , 'admin']
+        enum:['student' , 'hoh' , 'admin']
     },
     title:{
         type:String,
