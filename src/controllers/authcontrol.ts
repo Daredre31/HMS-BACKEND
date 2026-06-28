@@ -144,7 +144,7 @@ studentLogin = async (req:Request , res:Response) => {
             ip : req.ip
         }
 
-        await redis.set(`sessionId: ${sessionId}` ,JSON.stringify(sessionData) , 'EX' , 604800)
+        await redis.set(`sessionId:${sessionId}` ,JSON.stringify(sessionData) , 'EX' , 604800)
 
 
         const secret = process.env.JWT_SECRET as string
