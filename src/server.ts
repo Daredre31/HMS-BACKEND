@@ -18,7 +18,7 @@ app.use(morgan('dev'))
 app.use(cookieParser())
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173" , "https://hostelos-ashy.vercel.app"],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true,
      exposedHeaders: [
