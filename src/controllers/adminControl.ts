@@ -199,6 +199,27 @@ class admincontrol {
       sendRes(res , 500 , false , 'error occured wh8le updating student')
      }
    }
+
+   getStudentById = async (req: Request, res: Response) => {
+  const { id } = req.params
+
+  try {
+    const student = await studentid.findById(id).populate({
+      path: "bed",
+      populate: {
+        path: "room"
+      }
+    })
+
+    if (!student) {
+      return sendRes(res, 404, false, "student not found")
+    }
+
+    sendRes(res, 200, true, "student fetched successfully", student)
+  } catch (error: any) {
+    res.status(500).json({ error: error.message })
+  }
+}
 }
 
   
