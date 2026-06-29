@@ -62,7 +62,7 @@ studentLogin = async (req:Request , res:Response) => {
         const secret = process.env.JWT_SECRET as string
         const refresh=process.env.JWT_REFRESH as string
 
-        const accesstoken = Jwt.sign({id:loginStudent._id , tokenId:loginStudent.tokenId} , secret , {expiresIn:"15m"})
+        const accesstoken = Jwt.sign({id:loginStudent._id , tokenId:loginStudent.tokenId , role:loginStudent.role} , secret , {expiresIn:"15m"})
          const refreshToken = Jwt.sign({sessionId} , refresh , {expiresIn:'7d'})
 
          res.cookie('refreshToken' , refreshToken , {
