@@ -1,7 +1,7 @@
 import users from '../models/user'
 import {Request , Response} from 'express'
 import bcrypt from 'bcrypt'
-import  Jwt  from 'jsonwebtoken'
+import  Jwt, { JwtPayload }  from 'jsonwebtoken'
 import studentId from '../models/studentId'  
 import { sendRes } from '../utils/response'
 import redis from '../configs/redisConnect'
@@ -48,14 +48,34 @@ studentLogin = async (req:Request , res:Response) => {
         loginStudent.isTaken=true
         await loginStudent.save()
 
-        const secret = process.env.JWT_SECRET as string
+        const sessionId = nanoid();
 
-        const token = Jwt.sign({id:loginStudent._id , tokenId:loginStudent.tokenId} , secret , {expiresIn:"7d"})
+        const sessionData = {
+            userId : loginStudent._id,
+            role:loginStudent.role,
+            ip : req.ip
+        }
+
+
+        await redis.set(sessionId ,JSON.stringify(sessionData) , 'EX' , 604800)
+
+        const secret = process.env.JWT_SECRET as string
+        const refresh=process.env.JWT_REFRESH as string
+
+        const accesstoken = Jwt.sign({id:loginStudent._id , tokenId:loginStudent.tokenId} , secret , {expiresIn:"15m"})
+         const refreshToken = Jwt.sign({sessionId} , refresh , {expiresIn:'7d'})
+
+         res.cookie('refreshToken' , refreshToken , {
+            httpOnly:true,
+            secure:process.env.NODE_ENV == "production",
+            sameSite: process.env.NODE_ENV === "production" ? "none" :"lax",
+            maxAge:7*24*60*60*1000
+         })
 
         res.status(200).json({
             message:"login successfully",
             loginStudent,
-            token:token
+            token:accesstoken
         })
 
     } catch (error:any) {
@@ -149,13 +169,21 @@ studentLogin = async (req:Request , res:Response) => {
 
 
         const secret = process.env.JWT_SECRET as string
+         const refresh=process.env.JWT_REFRESH as string
 
-        const token = Jwt.sign({id:checkEmail._id , role:checkEmail.role , sessionId} , secret , {expiresIn:"7d"})
+        const Accesstoken = Jwt.sign({id:checkEmail._id , role:checkEmail.role } , secret , {expiresIn:"15m"})
+        const refreshToken = Jwt.sign({sessionId} , refresh , {expiresIn:'7d'})
 
+         res.cookie('refreshToken' , refreshToken , {
+            httpOnly:true,
+            secure:process.env.NODE_ENV == "production",
+            sameSite: process.env.NODE_ENV === "production" ? "none" :"lax",
+            maxAge:7*24*60*60*1000
+         })
         res.status(200).json({
             success:true , 
             message:"login successfuly",
-            token:token,
+            token:Accesstoken,
             role:checkEmail.role,
             name:checkEmail.name,
              email:checkEmail.email
@@ -163,6 +191,63 @@ studentLogin = async (req:Request , res:Response) => {
 
     } catch (error:any) {
         return sendRes(res , 500 , false ,"internal server error")
+    }
+  }
+
+  refreshAcessToken = async(req:Request , res:Response) => {
+   const refreshToken = req.cookies.refreshToken
+
+   try {
+
+    const verifyRefresh = Jwt.verify(refreshToken , process.env.JWT_REFRESH as string) as JwtPayload
+    const sessionKey = verifyRefresh.sessionId
+
+    const session = await redis.get(sessionKey)
+
+    if(!session) {
+        return sendRes(res , 401 ,false , "session expired")
+    }
+
+    const sessionData = JSON.parse(session);
+
+    await redis.del(sessionKey);
+
+    const newSessionId = nanoid()
+
+    await redis.set(newSessionId , JSON.stringify(sessionData) ,"EX" , 604800)
+
+    const accessToken = Jwt.sign({id:sessionData.userId , role:sessionData.role} , process.env.JWT_SECRET as string , {expiresIn:'15m'})
+    const newRefresh = Jwt.sign({newSessionId} , process.env.JWT_REFRESH as string , {expiresIn:'7d'})
+
+      res.cookie('refreshToken' , newRefresh , {
+            httpOnly:true,
+            secure:process.env.NODE_ENV == "production",
+            sameSite: process.env.NODE_ENV === "production" ? "none" :"lax",
+            maxAge:7*24*60*60*1000
+         })
+
+         sendRes(res , 200 , true, 'new acces token generated successfuly', accessToken)
+   } catch (error) {
+    return  sendRes(res , 500 , false , "internal server error")
+   }
+  } 
+
+  logout = async (req:Request , res:Response) => {
+    const refresh = req.cookies.refreshToken
+
+    try {
+
+        if(refresh) {
+          const verifyRefresh = Jwt.verify(refresh , process.env.JWT_REFRESH as string) as JwtPayload
+         const sessionKey = verifyRefresh.sessionId
+
+         await redis.del(sessionKey)
+        }
+         res.clearCookie('refreshToken')
+
+         sendRes(res , 200 , true , 'logout successfully')
+    } catch (error) {
+      return  sendRes(res, 500 , false , 'internal server error')
     }
   }
 

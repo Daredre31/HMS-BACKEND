@@ -36,6 +36,7 @@ route.patch('/createHOH/:id' , protect , roleauth('admin') , adminControl.assign
 route.post('/loginStudent',loginLimit , authcontrol.studentLogin)
 route.post('/createAdmin',loginLimit , authcontrol.AdminSignup)
 route.post('/loginAdmin',loginLimit , authcontrol.adminLogin);
+route.post('/logout' , protect , authcontrol.logout)
 
 
 // route for student complains 
