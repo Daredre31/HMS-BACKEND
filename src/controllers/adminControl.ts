@@ -154,7 +154,7 @@ class admincontrol {
    updateStudentByid = async (req:Request , res:Response) => {
       const {id} = req.params
       const {
-        name, email , currentSession , paymentStatus
+        name, email , currentSession , paymentStatus , role
       } = req.body
 
       if(!id) {
@@ -162,7 +162,7 @@ class admincontrol {
       }
 
       try {
-        const updateStudent = await studentid.findByIdAndUpdate(id, {name , email , currentSession , paymentStatus} , {new:true})
+        const updateStudent = await studentid.findByIdAndUpdate(id, {name , email , currentSession , paymentStatus , role} , {new:true})
 
           if(!updateStudent){
             return sendRes(res , 400 , false , "could not update student")
@@ -176,26 +176,26 @@ class admincontrol {
       }
    }
 
-  assignHohRole = async(req: Request, res: Response) => {
-  const { role } = req.body
-  const { id } = req.params
+//   assignHohRole = async(req: Request, res: Response) => {
+//   const { role } = req.body
+//   const { id } = req.params
 
-  try {
-    const student = await studentid.findByIdAndUpdate(
-      id,
-      { role },
-      { new: true }  
-    )
+//   try {
+//     const student = await studentid.findByIdAndUpdate(
+//       id,
+//       { role },
+//       { new: true }  
+//     )
 
-    if (!student) {
-      return sendRes(res, 404, false, "student not found")
-    }
+//     if (!student) {
+//       return sendRes(res, 404, false, "student not found")
+//     }
 
-    sendRes(res, 200, true, "role updated successfully", student)
-  } catch (error) {
-    sendRes(res, 500, false, "error updating role")
-  }
-}
+//     sendRes(res, 200, true, "role updated successfully", student)
+//   } catch (error) {
+//     sendRes(res, 500, false, "error updating role")
+//   }
+// } // this endpoint is nit needed yet i will update it later 
 
    getStudentById = async (req: Request, res: Response) => {
   const { id } = req.params
