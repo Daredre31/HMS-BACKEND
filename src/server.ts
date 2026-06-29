@@ -18,7 +18,18 @@ app.use(morgan('dev'))
 app.use(cookieParser())
 app.use(
   cors({
-    origin: ["http://localhost:5173" , "https://hostelos-ashy.vercel.app"],
+    origin: (origin, callback) => {
+      const allowed = [
+        "http://localhost:5173",
+        "https://hostelos-ashy.vercel.app"
+      ]
+      // allow requests with no origin (Postman, mobile apps)
+      if (!origin || allowed.includes(origin)) {
+        callback(null, true)
+      } else {
+        callback(new Error("Not allowed by CORS"))
+      }
+    },
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true,
      exposedHeaders: [
