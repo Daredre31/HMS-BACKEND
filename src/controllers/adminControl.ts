@@ -71,7 +71,7 @@ class admincontrol {
 
       await room.save()
 
-      sendStudentIdEmail(name , email , tokenId)
+     await sendStudentIdEmail(name , email , tokenId)
 
   sendRes(res , 201 , true , "student profile created successfully" ,
     studentProfile
