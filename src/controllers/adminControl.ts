@@ -5,6 +5,7 @@ import studentid from '../models/studentId'
 import {id} from '../utils/ID'
 import Room from '../models/room'
 import jwt from 'jsonwebtoken'
+import { sendStudentIdEmail } from '../utils/SendEmail'
 
 
 
@@ -69,6 +70,8 @@ class admincontrol {
       
 
       await room.save()
+
+      sendStudentIdEmail(name , email , tokenId)
 
   sendRes(res , 201 , true , "student profile created successfully" ,
     studentProfile

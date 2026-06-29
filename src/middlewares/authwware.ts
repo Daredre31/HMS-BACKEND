@@ -35,7 +35,7 @@ const protects = async (req:Authreqest , res:Response , next:NextFunction) => {
 
     //  if(!session) {
     //     return sendRes(res , 401 , false , "session expired")
-    //  } // i commented this out since i have split he tolej between refresh token and access token
+    //  } // i commented this out since i have split he token between refresh token and access token
       
       req.user = verifiedToken
 

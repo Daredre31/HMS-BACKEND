@@ -217,7 +217,7 @@ studentLogin = async (req:Request , res:Response) => {
     await redis.set(newSessionId , JSON.stringify(sessionData) ,"EX" , 604800)
 
     const accessToken = Jwt.sign({id:sessionData.userId , role:sessionData.role} , process.env.JWT_SECRET as string , {expiresIn:'15m'})
-    const newRefresh = Jwt.sign({newSessionId} , process.env.JWT_REFRESH as string , {expiresIn:'7d'})
+    const newRefresh = Jwt.sign({sessionId:newSessionId} , process.env.JWT_REFRESH as string , {expiresIn:'7d'})
 
       res.cookie('refreshToken' , newRefresh , {
             httpOnly:true,
