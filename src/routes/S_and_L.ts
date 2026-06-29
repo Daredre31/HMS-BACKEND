@@ -29,7 +29,7 @@ route.get('/getStudents' ,protect , roleauth('admin'), adminControl.getallStuden
 route.delete('/deleteStudent/:id' , protect , roleauth('admin') , adminControl.deletestudentById)
 route.patch('/updateStudent/:id' , protect , roleauth('admin') , adminControl.updateStudentByid)
 route.patch('/createHOH/:id' , protect , roleauth('admin') , adminControl.assignHohRole)
-
+route.delete('/bed/:id' , protect , roleauth('admin'), Bedobject.deleteBedbyId)
 
 // route for signups and signing function
 
