@@ -42,10 +42,10 @@ route.post('/refresh', authcontrol.refreshAcessToken)
 
 // route for student complains 
 
-route.post('/createcomplain', protect , complain.createcomplain)
-route.put('/replycomplain/:id' , protect , complain.respondTocomplains)
-route.get('/viewallcomplains', protect  , complain.viewallcomplains)
-route.get('/viewmycomplain' , protect , complain.viewmyComplains)
+route.post('/createcomplain', protect ,roleauth('student' , 'hoh') ,complain.createcomplain)
+route.put('/replycomplain/:id' , protect ,roleauth('admin') ,complain.respondTocomplains)
+route.get('/viewallcomplains', protect  ,roleauth('admin'), complain.viewallcomplains)
+route.get('/viewmycomplain' , protect , roleauth('student' , 'hoh'),complain.viewmyComplains)
 
 // route for notifications
 route.get('/allnotis' , protect , notisController.getallNotification)

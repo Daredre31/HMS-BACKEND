@@ -75,12 +75,15 @@ class complains {
             return sendRes(res, 400 , false , "response is bad")
         }
 
-          await notismodel.create({
+        if(updateComplains.student){
+           await notismodel.create({
             recipient:(updateComplains.student as any)._id,
             recipientRole:"student",
             title:"new notification",
             message:"view admin response"
           })
+        }
+         
 
         sendRes(res , 200 , true , "complains updated successfully" , updateComplains)
       } catch (error:any) {

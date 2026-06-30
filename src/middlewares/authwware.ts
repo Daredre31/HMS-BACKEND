@@ -31,12 +31,6 @@ const protects = async (req:Authreqest , res:Response , next:NextFunction) => {
 
       const verifiedToken =  jwt.verify(bearerSplit , process.env.JWT_SECRET as string ) as JwtPayload;
 
-    //  const session = await redis.get(verifiedToken.sessionId)
-
-    //  if(!session) {
-    //     return sendRes(res , 401 , false , "session expired")
-    //  } // i commented this out since i have split he token between refresh token and access token
-      
       req.user = verifiedToken
 
       next()
