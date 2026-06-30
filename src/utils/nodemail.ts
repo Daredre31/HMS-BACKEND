@@ -11,11 +11,14 @@ const setup = nodemailer.createTransport({
 export const sendNodeEmail = async( 
     studentName: string,
     studentEmail: string,
-    tokenId: string) => {
-    try {
+    tokenId: string,
+  ) => {
         const loginUrl = `${process.env.FRONTEND_URL}/student/login`
-        await setup.sendMail({
-           from:'' ,
+
+        try {
+
+          await setup.sendMail({
+           from:`"APPLICK HOOSTELOS" <${process.env.GMAIL}> ` ,
            to:studentEmail,
            subject:"Your hostel login url and id",
            html:`<div style="font-family:sans-serif;max-width:480px;margin:0 auto;padding:32px;">
@@ -35,7 +38,10 @@ export const sendNodeEmail = async(
         </p>
       </div>`
         })
-    } catch (error) {
+          
+        } catch (error:any) {
+          console.error("error while sending email" , error.message)
+        }
         
-    }
+    
 }
