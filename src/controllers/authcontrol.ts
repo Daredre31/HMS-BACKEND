@@ -62,7 +62,7 @@ studentLogin = async (req:Request , res:Response) => {
         const secret = process.env.JWT_SECRET as string
         const refresh=process.env.JWT_REFRESH as string
 
-        const accesstoken = Jwt.sign({id:loginStudent._id , tokenId:loginStudent.tokenId , role:loginStudent.role} , secret , {expiresIn:"15m"})
+        const accesstoken = Jwt.sign({id:loginStudent._id , tokenId:loginStudent.tokenId , role:loginStudent.role} , secret , {expiresIn:"30s"})
          const refreshToken = Jwt.sign({sessionId} , refresh , {expiresIn:'7d'})
 
          res.cookie('refreshToken' , refreshToken , {
@@ -171,7 +171,7 @@ studentLogin = async (req:Request , res:Response) => {
         const secret = process.env.JWT_SECRET as string
          const refresh=process.env.JWT_REFRESH as string
 
-        const Accesstoken = Jwt.sign({id:checkEmail._id , role:checkEmail.role } , secret , {expiresIn:"15m"})
+        const Accesstoken = Jwt.sign({id:checkEmail._id , role:checkEmail.role } , secret , {expiresIn:"30s"})
         const refreshToken = Jwt.sign({sessionId} , refresh , {expiresIn:'7d'})
 
          res.cookie('refreshToken' , refreshToken , {
@@ -216,7 +216,7 @@ studentLogin = async (req:Request , res:Response) => {
 
     await redis.set(newSessionId , JSON.stringify(sessionData) ,"EX" , 604800)
 
-    const accessToken = Jwt.sign({id:sessionData.userId , role:sessionData.role} , process.env.JWT_SECRET as string , {expiresIn:'15m'})
+    const accessToken = Jwt.sign({id:sessionData.userId , role:sessionData.role} , process.env.JWT_SECRET as string , {expiresIn:'30s'})
     const newRefresh = Jwt.sign({sessionId:newSessionId} , process.env.JWT_REFRESH as string , {expiresIn:'7d'})
 
       res.cookie('refreshToken' , newRefresh , {
