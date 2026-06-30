@@ -15,6 +15,7 @@ const app = express();
 
 app.use(helmet())
 app.use(morgan('dev'))
+app.set('trust proxy', 1)
 app.use(cookieParser())
 app.use(
   cors({
