@@ -226,7 +226,6 @@ studentLogin = async (req:Request , res:Response) => {
             maxAge:7*24*60*60*1000
          })
 
-        //  sendRes(res , 200 , true, 'new acces token generated successfuly', accessToken)
 
          res.status(200).json({
                 success: true,
@@ -234,8 +233,9 @@ studentLogin = async (req:Request , res:Response) => {
                 token: accessToken
             })
 
-   } catch (error) {
-    return  sendRes(res , 500 , false , "internal server error")
+   } catch (error:any) {
+    console.error("refresh error" , error.message)
+    return  sendRes(res , 401 , false , "innvalid or expired token")
    }
   } 
 
