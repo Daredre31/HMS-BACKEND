@@ -233,7 +233,7 @@ studentLogin = async (req:Request , res:Response) => {
                 message: "new access token generated successfully",
                 token: accessToken
             })
-            
+
    } catch (error) {
     return  sendRes(res , 500 , false , "internal server error")
    }
@@ -250,7 +250,11 @@ studentLogin = async (req:Request , res:Response) => {
 
          await redis.del(sessionKey)
         }
-         res.clearCookie('refreshToken')
+        res.clearCookie('refreshToken', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        })
 
          sendRes(res , 200 , true , 'logout successfully')
     } catch (error) {

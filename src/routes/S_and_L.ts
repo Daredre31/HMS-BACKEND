@@ -36,7 +36,7 @@ route.delete('/bed/:id' , protect , roleauth('admin'), Bedobject.deleteBedbyId)
 route.post('/loginStudent',loginLimit , authcontrol.studentLogin)
 route.post('/createAdmin',loginLimit , authcontrol.AdminSignup)
 route.post('/loginAdmin',loginLimit , authcontrol.adminLogin);
-route.post('/logout' , protect , authcontrol.logout)
+route.post('/logout' , authcontrol.logout)
 route.post('/refresh', authcontrol.refreshAcessToken)
 
 
