@@ -6,7 +6,6 @@ export interface authres extends Request{
 
 const roleauth = ( ...role:string[]) => {
 
-
     return (req:authres,res:Response , next:NextFunction) =>{
 
         console.log("Allowed:", role);

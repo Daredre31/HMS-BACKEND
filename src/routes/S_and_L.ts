@@ -24,7 +24,7 @@ route.get('/allbed' , Bedobject.getallBeds)
 
 // route for admin control crud operation
 
-route.post('/createStudent',protect, roleauth('admin'), adminControl.createstudent);
+route.post('/createStudent',protect, roleauth('admin', 'hoh'), adminControl.createstudent);
 route.get('/getStudents' ,protect , roleauth('admin'), adminControl.getallStudent);
 route.get('/student/:id', protect , roleauth('admin') , adminControl.getStudentById)
 route.delete('/deleteStudent/:id' , protect , roleauth('admin') , adminControl.deletestudentById)
