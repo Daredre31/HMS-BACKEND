@@ -9,7 +9,7 @@ import { loginLimit } from '../middlewares/rateLimit'
 import complain from '../controllers/complain'
 import notisController from '../controllers/notisController'
 import Dashboard from '../controllers/Dashboard'
-import { testing } from '../controllers/testredis'
+import taskObj from '../controllers/TaskControl'
 
 const route = express.Router()
 
@@ -57,8 +57,19 @@ route.patch('/markallasread' , protect , notisController.markAllasread);
 
 route.get('/dashboardstats',protect, roleauth('admin') , Dashboard.countStudent)
 
-route.get('/testing' , testing)
+// hoh and student task operation route
+
+route.get('/alltasks' , protect , roleauth('hoh'), taskObj.viewAllTask)
+route.post('/assigntask' , protect , roleauth('hoh'), taskObj.createTask)
+route.get('/mytask', protect , roleauth('student'), taskObj.viewMytask)
+route.patch('/completetask/:id' , protect, roleauth('student') , taskObj.completeTask)
 
 export default route
 
-//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMjkwY2M5N2Y3YzZkMGRkYzIyZDAxMyIsInJvbGUiOiJhZG1pbiIsInNlc3Npb25JZCI6IldneDhyOW1Sd2phT3phT3NoQ3AzcyIsImlhdCI6MTc4MjU5Mjg5NCwiZXhwIjoxNzgzMTk3Njk0fQ.cPMRKF1Bo5kQBH9V7IKZB1YbhNNZLxaQx8HeMvWCed8
+//"title":"testing task",
+//  "description":"wash toilet",
+//  "name":"Omotayo Olaniyi",
+//  "dueDate":"2026-05-13"
+//6a440eb91e1f01c2d94490dd
+//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhNDQwZTNiMWUxZjAxYzJkOTQ0OTBkYyIsInRva2VuSWQiOiJJRC0tT0JSVTFTWlZBIiwicm9sZSI6ImhvaCIsImlhdCI6MTc4Mjg5NjczOSwiZXhwIjoxNzgyOTgzMTM5fQ.ao3jm36ctjURQ7H27hkjMAG6TMbsQp4gKwiydrnEvrc
+
