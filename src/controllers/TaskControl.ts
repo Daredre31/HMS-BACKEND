@@ -8,13 +8,13 @@ import { Authreqest } from "../middlewares/authwware";
 
 class taskObj {
     createTask = async(req:Request , res:Response)=> {
-      const {title , description , name , dueDate} = req.body
-      if(!title || !description || !name || !dueDate){
+      const {title , description , assignTo , dueDate} = req.body
+      if(!title || !description || !assignTo || !dueDate){
         return sendRes(res , 400 , false , "all field asre required")
       }
 
       try {
-        const findName = await idmodel.findOne({name})
+        const findName = await idmodel.findById(assignTo)
         if(!findName){
             return sendRes(res, 400 , false , "no student with this name ")
         }
