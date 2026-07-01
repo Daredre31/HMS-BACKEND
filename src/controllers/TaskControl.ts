@@ -14,7 +14,7 @@ class taskObj {
       }
 
       try {
-        const findName = await idmodel.findById(assignTo)
+        const findName = await idmodel.findOne({name:assignTo})
         if(!findName){
             return sendRes(res, 400 , false , "no student with this name ")
         }
