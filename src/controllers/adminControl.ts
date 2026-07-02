@@ -5,7 +5,7 @@ import studentid from '../models/studentId'
 import {id} from '../utils/ID'
 import Room from '../models/room'
 import jwt from 'jsonwebtoken'
-import { sendStudentIdEmail } from '../utils/SendEmail'
+import { sendStudentIdEmail, sendUpdateEmail } from '../utils/SendEmail'
 // import { sendNodeEmail } from '../utils/nodemail'
 
 
@@ -166,12 +166,14 @@ class admincontrol {
         return sendRes(res , 400 , false , "could not find id")
       }
 
+
       try {
         const updateStudent = await studentid.findByIdAndUpdate(id, {name , email , currentSession , paymentStatus , role} , {new:true})
-
+         const tokenId=updateStudent?.tokenId
           if(!updateStudent){
             return sendRes(res , 400 , false , "could not update student")
           }
+          sendUpdateEmail(name , email, tokenId )
 
           sendRes(res , 200 , true , "student updated succeessfully" , updateStudent)
       } catch (error:any) {
