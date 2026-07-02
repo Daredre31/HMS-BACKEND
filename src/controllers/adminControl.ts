@@ -173,7 +173,7 @@ class admincontrol {
           if(!updateStudent){
             return sendRes(res , 400 , false , "could not update student")
           }
-          sendUpdateEmail(name , email, tokenId )
+         await sendUpdateEmail(name , email, tokenId )
 
           sendRes(res , 200 , true , "student updated succeessfully" , updateStudent)
       } catch (error:any) {
