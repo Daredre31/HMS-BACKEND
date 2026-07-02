@@ -44,8 +44,8 @@ export const sendStudentIdEmail = async (
     to: studentEmail,
     subject: 'Your HostelOS Login ID',
     html: `<div style="font-family:sans-serif;max-width:480px;margin:0 auto;padding:32px;">
-                    <h2 style="color:#0d9488;">Welcome to APPLICKHOSTEL, ${studentName}!</h2>
-                    <p>Your hostel account updated. logout and login back using the ID below to check update :</p>
+                    <h2 style="color:#0d9488;">Hostel Portal Update, ${studentName}!</h2>
+                    <p>Your hostel portal has been updated. logout and login back using the ID below to check update :</p>
                     <div style="background:#f1f5f9;border-radius:8px;padding:16px;text-align:center;margin:24px 0;">
                         <span style="font-family:monospace;font-size:20px;font-weight:bold;letter-spacing:4px;color:#0f172a;">
                             ${tokenId}
