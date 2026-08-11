@@ -1,7 +1,6 @@
 import {Request , Response , NextFunction} from 'express'
 import jwt, { JwtPayload } from 'jsonwebtoken'
-import redis from '../configs/redisConnect'
-import { sendRes } from '../utils/response'
+
 
 export interface Authreqest extends Request {
     user?:any

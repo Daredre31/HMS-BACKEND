@@ -9,4 +9,4 @@ dotenv.config()
     } catch (error) {
         console.log(error)
     }
-}
+} 

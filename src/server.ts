@@ -1,5 +1,4 @@
 import express from 'express'
-import mongoose from 'mongoose';
 import dotenv from 'dotenv'
 dotenv.config()
 import cors from 'cors'
@@ -22,9 +21,9 @@ app.use(
     origin: (origin, callback) => {
       const allowed = [
         "http://localhost:5173",
-        "https://hostelos-ashy.vercel.app"
+        "https://resentra.vercel.app"
       ]
-      // allow requests with no origin (Postman, mobile apps)
+    
       if (!origin || allowed.includes(origin)) {
         callback(null, true)
       } else {
@@ -44,9 +43,6 @@ app.use(
 app.use(express.json());
 app.use('/server' , route)
 
-app.get("/", (req, res) => {
-  res.send("Backend is working");
-});
 
 const port = process.env.PORT_NUM || 5000
 
